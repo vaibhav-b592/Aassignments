@@ -1,2 +1,2 @@
-# python-assignments
-This repository contains my Python assignments and projects.
+# Assignments
+This repository contains my assignments and projects.
