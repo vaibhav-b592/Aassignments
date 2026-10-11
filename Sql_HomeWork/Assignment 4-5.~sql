@@ -1,0 +1,120 @@
+create table emp1(
+emplyee_id number,
+full_name varchar2(14),
+salary number,
+hire_date date);
+
+select * from emp1;
+
+insert into emp1 values(100, 'S.King', 24000, to_date('6/17/2003','mm/dd/yyyy'));
+insert into emp1 values (116, 'S.Baida',   2900, to_date('24/12/2005','dd/mm/yyyy'));
+insert into emp1 values (117, 'S.Tobias',  2800, to_date('24/07/2005','dd/mm/yyyy'));
+insert into emp1 values (123, 'S.Vollman', 6500, to_date('10/10/2005','dd/mm/yyyy'));
+insert into emp1 values (128, 'S.Markle',  2200, to_date('08/03/2008','dd/mm/yyyy'));
+insert into emp1 values (138, 'S.Stiles',  3200, to_date('26/10/2005','dd/mm/yyyy'));
+insert into emp1 values (161, 'S.Sewall',  7000, to_date('03/11/2006','dd/mm/yyyy'));
+
+--Q1: Write a query to display the Full name only those employees whose first name start with ‘S’ character.
+select full_name from emp1
+where full_name like 'S%'; 
+
+select emplyee_id, substr(full_name, 1, 1) first_name,
+salary, hire_date
+from emp1
+where substr(full_name,1,1) = 'S';
+
+--Q2. Find the highest, lowest, sum, and average salary of all employees. Label the columns Maximum ,Minimum, Sum, and Average, respectively. Round your results to the nearest whole number. 
+select 
+      round(max(salary))as maximum,
+      round(min(salary))as minimum,
+      round(sum(salary)) as sum,
+      round(avg(salary)) as avg
+from emp1;  
+
+--Q3. Display following output .Employee Details
+
+/*King earns $24,000.00 monthly but wants $72,000.00.
+Kochhar earns $20,000.00 monthly but wants $60,000.00.
+De Haan earns $17,000.00 monthly but wants $51,000.00.
+Hunold earns $9,000.00 monthly but wants $27,000.00.
+Ernst earns $6,000.00 monthly but wants $18,000.00.
+Austin earns $4,800.00 monthly but wants $14,400.00. */
+
+select
+        full_name ||' earns $'||to_char(salary, '99,999.00')||'Monthly but wants $'||to_char(salary * 3, '99,999.00')|| '.' as "employee details"
+from emp1;        
+
+---------------------------------------------------------------------------------------------------------------------------------
+create table emp2(
+job_title varchar2(30),
+employee number,
+managers number);
+
+select * from emp2;
+
+insert into emp2 values('Accountant', 5, 1);
+insert into emp2 values('Accounting Manager', 1, 1);
+insert into emp2 values('Administration Assistant	', 1, 1);
+insert into emp2 values('Administration Vice President', 2, 1);
+insert into emp2 values('Finance Manager', 1, 1);
+insert into emp2 values('Human Resources Representative', 1, 1);
+insert into emp2 values('Marketing Manager', 1, 1);
+insert into emp2 values('Sales Representative', 30, 5);
+insert into emp2 values('Shipping Clerk', 20, 5);
+insert into emp2 values('Stock Clerk', 20, 5);
+
+--Q4. Determine the number of managers without listing them. Label the column  Number of Managers Hint: Use the MANAGER_ID column to determine the number of managers
+select count(managers) number_of_mangager
+from emp2;
+
+--Q5. Find the difference between the highest and lowest salaries. Label the column DIFFERENCE
+select max(salary) - min(salary) salary_difference
+from emp1;
+
+--Q6. Display how many employees joined in each month Hint: Grouping by month and count the employees .use TO_CHAR functions also
+select to_char(hire_date,'month') month, count(emplyee_id)
+from emp1
+group by to_char(hire_date,'month')
+order by month asc;
+
+--Q7. Display employee id , full name of employees and their hire date only those employees that has greater than 10 year experience in company.
+select emplyee_id, full_name, hire_date
+from emp1
+where (to_char(hire_date) < sysdate-365*10);
+
+select emplyee_id, full_name, hire_date
+from emp1
+where months_between(sysdate, hire_date)/ 12 > 10;
+
+
+--Q8. Write a query to multipley  salary to commission and calculate the average salary of employees.Hint: Commission column contain null values
+
+--Q9.Write a query to display department_id and number of manager under the particular department exclude the null department.Hint: Grouping on department id
+select department_id,count(manager_id)
+from departments
+where department_id is null
+group by department_id;
+
+--Q10.Display job title and number of employees working those job and number of manager they perform job.
+select count(job_title), count(managers), job_title
+from emp2
+group by job_title;
+
+--Q11. Display employee full name and pad both side asterisk sing 10 time . Example 
+select '*' ||'*'||'*'||'*'||'*'||'*'||'*'||'*'||'*'||'*'||'*'|| full_name ||'*'||'*'||'*'||'*'||'*'||'*'||'*'||'*'||'*'||'*'|| '*' as paded_name
+from emp1
+
+
+select '**********' || full_name || '**********' as padded_name
+from emp1;
+
+
+--Q12. Display following output. (Hint: Use Months_between Function)
+select emplyee_id, full_name, hire_date,round(months_between(sysdate, hire_date)/7) weeks,
+round(months_between(sysdate, hire_date)) months, round(months_between(sysdate, hire_date)/12) years
+from emp1
+
+
+
+
+   
